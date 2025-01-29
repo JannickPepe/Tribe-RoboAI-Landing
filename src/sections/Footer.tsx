@@ -32,16 +32,19 @@ export const socialLinks = [
     name: "Youtube",
     icon: faYoutube,
     href: "https://www.youtube.com/",
+    label: "Our Youtube Channel"
   },
   {
     name: "X",
     icon: faXTwitter,
     href: "https://x.com/",
+    label: "Our Tweeter/X account"
   },
   {
     name: "Discord",
     icon: faDiscord,
     href: "https://discord.com/",
+    label: "Our Discord channel"
   },
 ];
 
@@ -75,7 +78,7 @@ export const Footer = () => {
         <div className="mt-16 flex flex-col md:flex-row-reverse md:justify-between items-center gap-8">
           <div className="flex justify-center gap-6">
             {socialLinks.map((link) => (
-              <a href={link.href} key={link.name}>
+              <a href={link.href} key={link.name} aria-label={link.label}>
                 <div className="size-10 rounded-full bg-gray-900 inline-flex items-center justify-center">
                   <FontAwesomeIcon icon={link.icon} className="size-4" />
                 </div>

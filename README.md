@@ -2,7 +2,7 @@
 
 A modern AI landing page designed and developed by **NighteCoding**. This project provides a visually appealing and responsive design using cutting-edge technologies to showcase AI tools and features.
 
-![Project Preview](./public/assets/images/project-preview.png)
+![Project Preview](./public/assets/images/NighteCoding-AiLanding.png)
 
 ---
 
@@ -26,4 +26,4 @@ JP-Tribe-AI-Landing is a Next.js-based web application for showcasing AI tools a
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/NighteCoding/JP-Tribe-AI-Landing.git
+   git clone https://github.com/JannickPepe/Tribe-RoboAI-Landing.git
