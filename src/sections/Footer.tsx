@@ -31,17 +31,17 @@ export const socialLinks = [
   {
     name: "Youtube",
     icon: faYoutube,
-    href: "#",
+    href: "https://www.youtube.com/",
   },
   {
     name: "X",
     icon: faXTwitter,
-    href: "#",
+    href: "https://x.com/",
   },
   {
     name: "Discord",
     icon: faDiscord,
-    href: "#",
+    href: "https://discord.com/",
   },
 ];
 
@@ -82,8 +82,8 @@ export const Footer = () => {
               </a>
             ))}
           </div>
-          <p className="text-gray-500 text-sm">
-            &copy; Frontend Tribe, All rights reserved.
+          <p className="text-gray-400 text-sm">
+            &copy; NihteCoding, All rights reserved.
           </p>
         </div>
       </div>

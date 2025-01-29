@@ -188,7 +188,7 @@ export const Hero = () => {
                 >
                   <div>
                     <strong>Brainwave:</strong> I created one based on videos
-                    from Frontend Tribe!
+                    from NighteCoding!
                   </div>
                   <div className="text-right text-gray-400 text-sm font-semibold">
                     Just now

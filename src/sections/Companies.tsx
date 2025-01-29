@@ -43,7 +43,7 @@ export const Companies = () => {
       <div className="container">
         <SectionBorder>
           <SectionContent className="!pt-0">
-            <h2 className="text-center text-xs font-bold uppercase tracking-widest text-gray-500">
+            <h2 className="text-center text-xs font-bold uppercase tracking-widest text-gray-400">
               Empowering creators at leading companies
             </h2>
             <div className="flex mt-20 overflow-x-clip -mx-4 lg:-mx-8">

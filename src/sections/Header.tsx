@@ -77,6 +77,7 @@ export const Header = () => {
             </div>
             <div className="flex items-center lg:hidden">
               <button
+                id="OpenMenu"
                 className="size-10 rounded-lg border-2 border-transparent [background:linear-gradient(var(--color-gray-950),var(--color-gray-950))_content-box,conic-gradient(from_45deg,var(--color-violet-400),var(--color-fuchsia-400),var(--color-amber-300),var(--color-teal-300),var(--color-violet-400))_border-box] relative"
                 onClick={() => setIsMobileNavOpen((curr) => !curr)}
               >

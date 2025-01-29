@@ -14,35 +14,25 @@ const spaceGroteskFont = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'JPTribe-AI-Landing | By NighteCoding',
-  description:
-    'Welcome to AI Landing Page. Discover amazing AI tools and resources to elevate your projects.',
-  viewport: 'width=device-width, initial-scale=1',
-  robots: 'index, follow',
+  title: 'AI Landing Sass',
+  description: 'Created by NighteCoding',
   openGraph: {
-    title: 'AI Landing Page | Your Site Name',
-    description:
-      'Welcome to AI Landing Page. Discover amazing AI tools and resources to elevate your projects.',
-    url: 'https://jptribe-ai-landing.vercel.app',
-    siteName: 'AI Landing Page',
-    images: [
-      {
-        url: '/assets/images/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'AI Landing Page preview',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
+      type: 'website',
+      url: 'https://jptribe-ai-landing.vercel.app/',
+      title: 'AI Landing - by NighteCoding',
+      description: 'NighteCoding provides stable and highend solutions',
+      images: [
+          {
+          url: 'https://jptribe-ai-landing.vercel.app/og-image.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'AI Landing by NighteCoding',
+          },
+      ],
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({children,}: Readonly<{children: React.ReactNode;}>) {
   return (
     <html lang="en">
       <body

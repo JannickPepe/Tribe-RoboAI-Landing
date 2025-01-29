@@ -6,13 +6,11 @@ import { Pricing } from "@/sections/Pricing";
 import { Testimonials } from "@/sections/Testimonials";
 import { CallToAction } from "@/sections/CallToAction";
 import { Footer } from "@/sections/Footer";
-import type { Metadata } from "next";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: 'AI Landing Page | By NighteCoding',
   description:
     'Welcome to AI Landing Page. Discover amazing AI tools and resources to elevate your projects.',
-  viewport: 'width=device-width, initial-scale=1',
   robots: 'index, follow',
   openGraph: {
     title: 'AI Landing Page | Your Site Name',

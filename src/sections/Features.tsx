@@ -171,6 +171,8 @@ export const Features = () => {
                           src={src}
                           alt={alt}
                           className="size-6 md:size-9"
+                          height={36}
+                          width={36}
                         />
                       </motion.div>
                     </motion.div>
