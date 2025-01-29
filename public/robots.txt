@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://jptribe-ai-landing.vercel.app
+
+# Sitemaps
+Sitemap: https://jptribe-ai-landing.vercel.app/sitemap.xml
