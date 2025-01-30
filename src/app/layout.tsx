@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Sora, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import Header from "@/sections/Header";
+import Footer from "@/sections/Footer";
 
 const soraFont = Sora({
   subsets: ["latin"],
@@ -38,7 +40,9 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
       <body
         className={`${soraFont.variable} ${spaceGroteskFont.variable} antialiased bg-gray-950 text-gray-300 font-body`}
       >
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );

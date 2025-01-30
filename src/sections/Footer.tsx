@@ -1,12 +1,9 @@
 "use client";
 
-import React from "react";
-import {
-  faYoutube,
-  faXTwitter,
-  faDiscord,
-} from "@fortawesome/free-brands-svg-icons";
+import React, { useEffect, useState } from "react";
+import { faYoutube, faXTwitter, faDiscord, } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 
 export const navItems = [
   {
@@ -21,10 +18,6 @@ export const navItems = [
     name: "Testimonials",
     href: "#testimonials",
   },
-  {
-    name: "Login",
-    href: "#",
-  },
 ];
 
 export const socialLinks = [
@@ -32,28 +25,44 @@ export const socialLinks = [
     name: "Youtube",
     icon: faYoutube,
     href: "https://www.youtube.com/",
-    label: "Our Youtube Channel"
+    label: "Our Youtube Channel",
   },
   {
     name: "X",
     icon: faXTwitter,
     href: "https://x.com/",
-    label: "Our Tweeter/X account"
+    label: "Our Tweeter/X account",
   },
   {
     name: "Discord",
     icon: faDiscord,
     href: "https://discord.com/",
-    label: "Our Discord channel"
+    label: "Our Discord channel",
   },
 ];
 
 export const Footer = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check localStorage for logged-in status on mount
+  useEffect(() => {
+    const loggedInStatus = localStorage.getItem("loggedIn");
+    setIsLoggedIn(loggedInStatus === "true");
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.setItem("loggedIn", "false");
+    setIsLoggedIn(false);
+    window.location.href = "/";
+  };
+
   return (
-    <footer className=" border-t border-[var(--color-border)]">
+    <footer className="border-t border-[var(--color-border)]">
       <div className="container py-8">
         <div className="flex flex-col lg:flex-row lg:justify-between items-center gap-8">
-          <div className="font-extrabold text-2xl">sphereal.ai</div>
+          <Link href={"/"} className="font-extrabold text-2xl">
+            sphereal.ai
+          </Link>
           <nav className="flex flex-col md:flex-row gap-8 md:gap-16 items-center">
             {navItems.map((item) => (
               <a
@@ -73,6 +82,18 @@ export const Footer = () => {
                 {item.name}
               </a>
             ))}
+            {isLoggedIn ? (
+              <button
+                onClick={handleLogout}
+                className="uppercase text-xs tracking-widest font-bold text-gray-400"
+              >
+                Logout
+              </button>
+            ) : (
+              <Link href={"/login"} className="uppercase text-xs tracking-widest font-bold text-gray-400">
+                Login
+              </Link>
+            )}
           </nav>
         </div>
         <div className="mt-16 flex flex-col md:flex-row-reverse md:justify-between items-center gap-8">
@@ -86,7 +107,7 @@ export const Footer = () => {
             ))}
           </div>
           <p className="text-gray-400 text-sm">
-            &copy; NihteCoding, All rights reserved.
+            &copy;NighteCoding, All rights reserved.
           </p>
         </div>
       </div>

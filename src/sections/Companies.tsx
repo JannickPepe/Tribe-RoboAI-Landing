@@ -53,7 +53,7 @@ export const Companies = () => {
                 transition={{
                   repeat: Infinity,
                   ease: "linear",
-                  duration: 10,
+                  duration: 25,
                 }}
                 className="flex flex-none gap-18 md:gap-36 px-9 md:px-18"
               >

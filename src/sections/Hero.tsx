@@ -16,6 +16,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { FiZap } from "react-icons/fi";
 
 export const useMousePosition = () => {
   const [innerWidth, setInnerWidth] = useState(1);
@@ -174,8 +175,8 @@ export const Hero = () => {
                   <div>
                     Can you generate an incredible frontend dev video tutorial?
                   </div>
-                  <div className="text-right text-gray-400 text-sm font-semibold">
-                    1m ago
+                  <div className="text-right text-gray-400 text-sm font-semibold flex items-center justify-between">
+                    <FiZap className="size-4 text-purple-600" /> <span>1m ago</span>
                   </div>
                 </motion.div>
               </div>
@@ -190,8 +191,8 @@ export const Hero = () => {
                     <strong>Brainwave:</strong> I created one based on videos
                     from NighteCoding!
                   </div>
-                  <div className="text-right text-gray-400 text-sm font-semibold">
-                    Just now
+                  <div className="text-right text-gray-400 text-sm font-semibold flex items-center justify-between">
+                    <FiZap className="size-4 text-purple-600" /> <span>Just now</span>
                   </div>
                 </motion.div>
               </div>

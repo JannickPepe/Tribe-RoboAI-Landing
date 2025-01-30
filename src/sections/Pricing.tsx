@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/Button";
 import { SectionBorder } from "@/components/SectionBorder";
 import { SectionContent } from "@/components/SectionContent";
@@ -5,6 +7,7 @@ import { twMerge } from "tailwind-merge";
 import { ButtonProps } from "@/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/navigation";
 
 export const pricingTiers = [
   {
@@ -64,6 +67,21 @@ export const pricingTiers = [
 }[];
 
 export const Pricing = () => {
+
+  const router = useRouter();
+
+  // Handle button click logic
+  const handleClick = (tier: typeof pricingTiers[number]) => {
+    const loggedIn = localStorage.getItem("loggedIn");
+    localStorage.setItem("selectedPlan", JSON.stringify(tier)); // Store selected plan
+
+    if (loggedIn === "true") {
+      router.push("/auth/plans");
+    } else {
+      router.push("/login");
+    }
+  };
+
   return (
     <section id="pricing">
       <div className="container">
@@ -72,6 +90,7 @@ export const Pricing = () => {
             <h2 className="text-3xl md:text-4xl lg:text-5xl leading-tight font-semibold text-center text-gray-200">
               Flexible plans for every need
             </h2>
+
             <div className="mt-12 flex flex-col lg:flex-row lg:items-start gap-8">
               {pricingTiers.map((tier) => (
                 <div
@@ -92,6 +111,7 @@ export const Pricing = () => {
                     {tier.title}
                   </h3>
                   <p className="mt-4 text-gray-400">{tier.description}</p>
+
                   <div className="mt-8">
                     {typeof tier.price === "number" && (
                       <span className="text-2xl font-semibold text-gray-200 align-top">
@@ -102,9 +122,14 @@ export const Pricing = () => {
                       {tier.price ? tier.price : <>&nbsp;</>}
                     </span>
                   </div>
-                  <Button className="mt-8" block variant={tier.buttonVariant}>
-                    {tier.buttonText}
-                  </Button>
+
+                  {/* Redirect button */}
+                  <div onClick={() => handleClick(tier)}>
+                    <Button className="mt-8" block variant={tier.buttonVariant} >
+                      {tier.buttonText}
+                    </Button>
+                  </div>
+
                   <ul className="flex flex-col gap-4 mt-8">
                     {tier.features.map((feature) => (
                       <li

@@ -1,9 +1,11 @@
 "use client";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import { Button, ButtonProps } from "@/components/Button";
 import { Orbit } from "@/components/Orbit";
 import { twMerge } from "tailwind-merge";
 import { Logo } from "@/components/Logo";
+import Link from "next/link";
 
 export const navItems = [
   {
@@ -20,16 +22,27 @@ export const navItems = [
   },
 ];
 
+export const navItemsAuth = [
+  {
+    name: "Plans",
+    href: "/auth/plans",
+  },
+  {
+    name: "Profile",
+    href: "/auth/profile",
+  },
+];
+
 export const loginItems = [
   {
     buttonVariant: "tertiary",
     name: "Login",
-    href: "#login",
+    href: "/login",
   },
   {
     buttonVariant: "primary",
     name: "Sign Up",
-    href: "#sign-up",
+    href: "/register",
   },
 ] satisfies {
   name: string;
@@ -39,15 +52,41 @@ export const loginItems = [
 
 export const Header = () => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+
+  // Check localStorage for logged-in status on mount
+  useEffect(() => {
+    const loggedInStatus = localStorage.getItem("loggedIn");
+    setIsLoggedIn(loggedInStatus === "true");
+  }, []);
+
+  // Logout function (doesn't delete user data)
+  const handleLogout = () => {
+    localStorage.setItem("loggedIn", "false");
+    setIsLoggedIn(false);
+    window.location.href = "/";
+  };
+
+  // Delete user function
+  const handleDeleteUser = () => {
+    localStorage.clear(); // Clears all user data
+    setIsLoggedIn(false);
+    window.location.href = "/";
+  };
+
   return (
     <>
       <header className="border-b border-gray-200/20 relative z-40">
         <div className="container">
           <div className="h-18 lg:h-20 flex justify-between items-center">
-            <div className="flex gap-4 items-center">
+            <Link href={'/'} className="flex gap-4 items-center">
               <Logo />
               <div className="font-extrabold text-2xl">sphereal.ai</div>
-            </div>
+            </Link>
+
+            {/* Desktop Navigation */}
             <div className="h-full hidden lg:block">
               <nav className="h-full">
                 {navItems.map(({ name, href }) => (
@@ -68,13 +107,50 @@ export const Header = () => {
                 ))}
               </nav>
             </div>
-            <div className="hidden lg:flex gap-4">
-              {loginItems.map(({ buttonVariant, name, href }) => (
-                <a href={href} key={name}>
-                  <Button variant={buttonVariant}>{name}</Button>
-                </a>
-              ))}
-            </div>
+            
+           {/* User Dropdown for Logged-In Users */}
+            {isLoggedIn ? (
+              <div className="relative hidden lg:block">
+                <button
+                  className="px-4 py-2 text-white bg-gray-800 rounded-lg"
+                  onClick={() => setIsDropdownOpen((prev) => !prev)}
+                >
+                  User
+                </button>
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg">
+                    {navItemsAuth.map(({ name, href }) => (
+                      <Link href={href} key={name} className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                        {name}
+                      </Link>
+                    ))}
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                    <button
+                      onClick={handleDeleteUser}
+                      className="block w-full px-4 py-2 text-left text-red-700 hover:bg-red-100"
+                    >
+                      Delete User
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              // Login/Register Buttons for Guests
+              <div className="hidden lg:flex gap-4">
+                {loginItems.map(({ buttonVariant, name, href }) => (
+                  <Link href={href} key={name}>
+                    <Button variant={buttonVariant}>{name}</Button>
+                  </Link>
+                ))}
+              </div>
+            )}
+
+            {/* Mobile Navigation Button */}
             <div className="flex items-center lg:hidden">
               <button
                 id="OpenMenu" 
@@ -103,6 +179,8 @@ export const Header = () => {
           </div>
         </div>
       </header>
+
+      {/* Mobile Navigation */}
       {isMobileNavOpen && (
         <div className="fixed top-18 left-0 bottom-0 right-0 bg-gray-950 z-30 overflow-hidden">
           <div className="absolute-center isolate -z-10">
@@ -129,9 +207,9 @@ export const Header = () => {
                   className="text-gray-400 uppercase tracking-widest font-bold text-xs h-10"
                   onClick={(e) => {
                     e.preventDefault();
-                    const element = document.querySelector(href);
+                    const targetId = href.startsWith("#") ? href : `#${href.replace("/", "")}`;
+                    const element = document.querySelector(targetId);
                     if (element) {
-                      setIsMobileNavOpen(false);
                       element.scrollIntoView({ behavior: "smooth" });
                     }
                   }}
