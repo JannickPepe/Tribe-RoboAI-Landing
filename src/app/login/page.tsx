@@ -26,7 +26,7 @@ const LoginPage = () => {
     return (
         <main className="py-24">
             <section className="flex flex-col items-center justify-center">
-                <h1 className="text-6xl font-bold">Login</h1>
+                <h1 className="text-4xl md:text-6xl font-bold">Login</h1>
                 <p className="text-xl mt-2">This is a LocalStorage approach</p>
                 <p>
                     Use either{" "}

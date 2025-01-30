@@ -6,24 +6,28 @@ import { useState } from "react";
 
 const RegisterPage = () => {
     const router = useRouter();
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const handleRegister = (e: React.FormEvent) => {
         e.preventDefault(); // Prevent default form submission
 
+        const currentDate = new Date().toLocaleDateString(); 
+
         // Save user data in localStorage
+        localStorage.setItem("name", name);
         localStorage.setItem("email", email);
         localStorage.setItem("password", password);
         localStorage.setItem("loggedIn", "true");
-
+        localStorage.setItem("createdAt", currentDate);
         router.push("/auth/plans"); // Redirect to a protected page
     };
 
     return (
         <main className="py-24">
             <section className="flex flex-col items-center justify-center">
-                <h1 className="text-6xl font-bold">Register</h1>
+                <h1 className="text-4xl md:text-6xl font-bold">Register</h1>
                 <p className="text-xl mt-2">This is a LocalStorage approach</p>
                 <p>
                     Use either{" "}
@@ -38,6 +42,14 @@ const RegisterPage = () => {
                 </p>
 
                 <form className="grid grid-cols-1 mt-6" onSubmit={handleRegister}>
+                    <input
+                        type="name"
+                        placeholder="Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="mt-4 p-2 border text-slate-800"
+                        required
+                    />
                     <input
                         type="email"
                         placeholder="Email"

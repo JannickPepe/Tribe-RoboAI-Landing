@@ -2,16 +2,12 @@
 
 import { HTMLAttributes, useEffect, useState } from "react";
 import { cva } from "class-variance-authority";
-import {
-  animate,
-  motion,
-  useMotionTemplate,
-  useMotionValue,
-} from "framer-motion";
+import { animate, motion, useMotionTemplate, useMotionValue, } from "framer-motion";
 
 export type ButtonProps = {
-  variant?: "primary" | "secondary" | "tertiary";
+  variant?: "primary" | "secondary" | "tertiary" | "disabled";
   block?: boolean;
+  disabled?: boolean;
 } & HTMLAttributes<HTMLButtonElement>;
 
 const classes = cva(
@@ -25,6 +21,7 @@ const classes = cva(
         primary: "border-gradient",
         secondary: "bg-gray-100 text-gray-950",
         tertiary: "bg-gray-800 text-gray-200",
+        disabled: "text-gray-400 cursor-not-allowed",
       },
     },
     defaultVariants: {
@@ -69,6 +66,7 @@ export const Button = (props: ButtonProps) => {
             }
           : undefined
       }
+      disabled={props.disabled}
     >
       {children}
     </motion.button>
