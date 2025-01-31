@@ -60,13 +60,27 @@ export const Header = () => {
 
   // Check localStorage for logged-in status on mount
   useEffect(() => {
-    const loggedInStatus = localStorage.getItem("loggedIn");
-    setIsLoggedIn(loggedInStatus === "true");
+    const checkLoginStatus = () => {
+      const loggedInStatus = localStorage.getItem("loggedIn");
+      setIsLoggedIn(loggedInStatus === "true");
+    };
+
+    checkLoginStatus(); // Initial check on mount
+    // Listen for login/logout events
+    window.addEventListener("authStatusChanged", checkLoginStatus);
+
+    return () => {
+      window.removeEventListener("authStatusChanged", checkLoginStatus);
+    };
   }, []);
+
 
   // Logout function (doesn't delete user data)
   const handleLogout = () => {
     localStorage.setItem("loggedIn", "false");
+    // Dispatch event to notify other components of logout
+    window.dispatchEvent(new Event("authStatusChanged"));
+
     setIsLoggedIn(false);
     window.location.href = "/";
   };
@@ -74,6 +88,9 @@ export const Header = () => {
   // Delete user function
   const handleDeleteUser = () => {
     localStorage.clear(); // Clears all user data
+
+    // Dispatch event to notify other components of user deletion
+    window.dispatchEvent(new Event("authStatusChanged"));
     setIsLoggedIn(false);
     window.location.href = "/";
   };

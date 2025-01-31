@@ -17,6 +17,8 @@ const LoginPage = () => {
 
         if (email === savedEmail && password === savedPassword) {
             localStorage.setItem("loggedIn", "true");
+            // Dispatch event to notify other components of login status change
+            window.dispatchEvent(new Event("authStatusChanged"));
             router.push("/auth/plans"); // Redirect to a protected page
         } else {
             alert("Invalid credentials");

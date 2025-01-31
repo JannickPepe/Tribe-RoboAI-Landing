@@ -83,17 +83,30 @@ type Plan = {
 export const Pricing = () => {
   const router = useRouter();
   const [verifiedPlan, setVerifiedPlan] = useState<Plan | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // Check if the user already has a verified plan
-    const storedPlan = localStorage.getItem("verifiedPlan");
-    if (storedPlan) {
-      setVerifiedPlan(JSON.parse(storedPlan));
+    // Get login status
+    const loggedInStatus = localStorage.getItem("loggedIn") === "true";
+    setIsLoggedIn(loggedInStatus);
+
+    // If user is logged in, check for verified plan
+    if (loggedInStatus) {
+      const storedPlan = localStorage.getItem("verifiedPlan");
+      if (storedPlan) {
+        setVerifiedPlan(JSON.parse(storedPlan));
+      }
+    } else {
+      setVerifiedPlan(null); // Reset verified plan when logged out
     }
   }, []);
 
   // Handle button click logic
   const handleClick = (tier: typeof pricingTiers[number]) => {
+    if (!isLoggedIn) {
+      router.push("/login"); // Redirect to login if not logged in
+      return;
+    }
     if (verifiedPlan) return; // Prevent selecting a new plan if already verified
 
     const loggedIn = localStorage.getItem("loggedIn");
@@ -118,7 +131,6 @@ export const Pricing = () => {
             <div className="mt-12 flex flex-col lg:flex-row lg:items-start gap-8">
               {pricingTiers.map((tier) => {
                 const isPlanLocked = verifiedPlan !== null; // Check if a plan is verified
-
                 return (
                   <div
                     key={tier.title}
