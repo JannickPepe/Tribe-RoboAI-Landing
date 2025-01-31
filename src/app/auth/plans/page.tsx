@@ -3,6 +3,11 @@
 import React, { useEffect, useState } from "react";
 import ProtectedRoute from "../ProtectedRoute";
 import Link from "next/link";
+import Loader from "@/assets/images/loader-animated.svg";
+import Image from "next/image";
+import robotImg from "@/assets/images/robot.jpg";
+import { SectionBorder } from "@/components/SectionBorder";
+import { SectionContent } from "@/components/SectionContent";
 
 const PlansPage = () => {
   interface Plan {
@@ -50,13 +55,32 @@ const PlansPage = () => {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col items-center py-12">
+      <div className="flex flex-col items-center">
         {isVerified ? (
-          <h1 className="text-3xl text-gray-200">
-            You have verified your plan. <Link href="/auth/profile" className="text-blue-400 underline">Go to your profile</Link>.
-          </h1>
-        ) : selectedPlan ? (
           <>
+            <SectionBorder>
+              <SectionContent className="relative isolate [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]">
+                <div className="-mt-10 lg:-mt-32 rounded-2xl border-2 overflow-hidden border-gradient relative flex">
+                  <Image src={robotImg} alt="Robot image" loading="lazy" className="h-[300px] lg:h-[600px]" />
+                  <div className="absolute top-2 md:bottom-4 lg:top-20 left-1/2 -translate-x-1/2 w-full px-[15px]">
+                    <div className="bg-gray-950/80 flex items-center gap-4 px-4 py-2 rounded-2xl max-w-full">
+                      <div className="font-semibold text-xl text-gray-100 mx-auto flex items-center gap-2">
+                        <Loader className="text-violet-400" />
+                        <h1 className="text-xl lg:text-4xl text-gray-200 text-center">
+                          You have verified your plan.<br/> 
+                          <Link href="/auth/profile" className="text-blue-400 underline">Go to your profile</Link>.
+                        </h1>
+                        <span className="animate-cursor-blink">|</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </SectionContent>
+            </SectionBorder>
+          </>
+          
+        ) : selectedPlan ? (
+          <div className="py-10 container">
             <h1 className="text-4xl font-bold text-gray-200">
               You have chosen the {selectedPlan.title} plan
             </h1>
@@ -107,7 +131,7 @@ const PlansPage = () => {
                 Remove Plan
               </button>
             </div>
-          </>
+          </div>
         ) : (
           <h1 className="text-3xl text-gray-200">No plan selected.</h1>
         )}

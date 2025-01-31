@@ -46,10 +46,10 @@ const ProfilePage = () => {
       <div className="flex flex-col items-center py-12">
         <h1 className="text-4xl md:text-5xl font-bold text-gray-200">Profile</h1>
 
-        <section className="grid grid-cols-1 lg:grid-cols-2">
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-6">
           {/* User Info Box */}
-          <div className="mt-6 border border-blue-500 bg-gray-900 py-4 px-6 rounded-xl w-full max-w-md">
-            <div className="flex justify-between items-center"> 
+          <div className="mt-6 border border-blue-500 bg-gray-900 py-4 px-6 rounded-xl w-full max-w-lg">
+            <div className="flex justify-between items-center gap-4"> 
               <h2 className="text-2xl font-semibold text-gray-200">User Information</h2>
               <p className="text-sm text-gray-400 ">
                 <span className="font-semibold">Created:</span> {createdAt || "Not available"}

@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export const pricingTiers = [
   {
@@ -152,14 +153,17 @@ export const Pricing = () => {
 
                     {/* Button Logic */}
                     <div onClick={() => handleClick(tier)}>
-                    <Button
-                      className="mt-8"
-                      block
-                      variant={isPlanLocked ? "disabled" : tier.buttonVariant} // Disable button if verified
-                      disabled={isPlanLocked} // ✅ No more type error
-                    >
-                      {isPlanLocked ? "Already have a plan" : tier.buttonText}
-                    </Button>
+                      <Button
+                        className="mt-8"
+                        block
+                        variant={isPlanLocked ? "disabled" : tier.buttonVariant} // Disable button if verified
+                        disabled={isPlanLocked} // ✅ No more type error
+                      >
+                        {isPlanLocked ? 
+                          <div>Already have a <Link href={'/auth/profile'} className="text-purple-400 font-semibold underline">plan</Link></div> 
+                          : tier.buttonText
+                        }
+                      </Button>
                     </div>
 
                     <ul className="flex flex-col gap-4 mt-8">
