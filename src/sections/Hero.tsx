@@ -17,6 +17,7 @@ import {
 } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { FiZap } from "react-icons/fi";
+import Link from "next/link";
 
 export const useMousePosition = () => {
   const [innerWidth, setInnerWidth] = useState(1);
@@ -111,7 +112,9 @@ export const Hero = () => {
             </p>
             <div className="flex justify-center">
               <Button variant="secondary" className="mt-10">
-                Start Chatting
+                <Link href={'/chat'} className="hover:text-purple-700 transition-colors">
+                  Start Chatting
+                </Link>
               </Button>
             </div>
             <div className="relative isolate max-w-5xl mx-auto">

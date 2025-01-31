@@ -8,6 +8,7 @@ import { Orbit } from "@/components/Orbit";
 import { Planet } from "@/components/Planet";
 import { useMousePosition } from "./Hero";
 import { useSpring, useTransform, motion } from "framer-motion";
+import Link from "next/link";
 
 export const CallToAction = () => {
   const { xProgress, yProgress } = useMousePosition();
@@ -139,7 +140,11 @@ export const CallToAction = () => {
               AI chat platform.
             </p>
             <div className="flex justify-center mt-10">
-              <Button variant="secondary">Get Started</Button>
+              <Button variant="secondary">
+                <Link href={'/chat'} className="hover:text-purple-700 transition-colors">
+                  Get Started
+                </Link>
+              </Button>
             </div>
           </SectionContent>
         </SectionBorder>
