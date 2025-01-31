@@ -6,6 +6,7 @@ import { Orbit } from "@/components/Orbit";
 import { twMerge } from "tailwind-merge";
 import { Logo } from "@/components/Logo";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 export const navItems = [
   {
@@ -54,7 +55,8 @@ export const Header = () => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const router = useRouter();
+  const pathname = usePathname();
 
   // Check localStorage for logged-in status on mount
   useEffect(() => {
@@ -76,6 +78,22 @@ export const Header = () => {
     window.location.href = "/";
   };
 
+  const handleNavClick = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+
+    if (pathname !== "/") {
+      // If user is not on home page, go to home first
+      router.push(`/${href}`);
+      return;
+    }
+
+    // Scroll to section if already on the homepage
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <>
       <header className="border-b border-gray-200/20 relative z-40">
@@ -93,9 +111,9 @@ export const Header = () => {
                   <a
                     href={href}
                     key={href}
-                    className="h-full px-10 relative font-bold text-xs tracking-widest text-gray-400 uppercase inline-flex items-center before:content-[''] before:absolute before:bottom-0 before:h-2 before:w-px before:bg-gray-200/20 before:left-0 last:after:absolute last:after:bottom-0 last:after:h-2 last:after:w-px last:after:bg-gray-200/20 last:after:right-0"
+                    className="h-full px-10 relative font-bold text-xs tracking-widest text-gray-400 hover:text-purple-500 uppercase inline-flex items-center before:content-[''] before:absolute before:bottom-0 before:h-2 before:w-px before:bg-gray-200/20 before:left-0 last:after:absolute last:after:bottom-0 last:after:h-2 last:after:w-px last:after:bg-gray-200/20 last:after:right-0 transition"
                     onClick={(e) => {
-                      e.preventDefault();
+                      handleNavClick(e, href)
                       const element = document.querySelector(href);
                       if (element) {
                         element.scrollIntoView({ behavior: "smooth" });

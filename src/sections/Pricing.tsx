@@ -81,7 +81,6 @@ type Plan = {
 
 
 export const Pricing = () => {
-  
   const router = useRouter();
   const [verifiedPlan, setVerifiedPlan] = useState<Plan | null>(null);
 

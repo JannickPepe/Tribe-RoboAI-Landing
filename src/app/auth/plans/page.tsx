@@ -70,7 +70,6 @@ const PlansPage = () => {
                           You have verified your plan.<br/> 
                           <Link href="/auth/profile" className="text-blue-400 underline">Go to your profile</Link>.
                         </h1>
-                        <span className="animate-cursor-blink">|</span>
                       </div>
                     </div>
                   </div>
@@ -80,7 +79,7 @@ const PlansPage = () => {
           </>
           
         ) : selectedPlan ? (
-          <div className="py-10 container">
+          <div className="py-10 container max-w-4xl">
             <h1 className="text-4xl font-bold text-gray-200">
               You have chosen the {selectedPlan.title} plan
             </h1>

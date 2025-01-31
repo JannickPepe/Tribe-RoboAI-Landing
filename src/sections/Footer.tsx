@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { faYoutube, faXTwitter, faDiscord, } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 export const navItems = [
   {
@@ -43,6 +44,8 @@ export const socialLinks = [
 
 export const Footer = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
   // Check localStorage for logged-in status on mount
   useEffect(() => {
@@ -56,6 +59,22 @@ export const Footer = () => {
     window.location.href = "/";
   };
 
+  const handleNavClick = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+
+    if (pathname !== "/") {
+      // If user is not on home page, go to home first
+      router.push(`/${href}`);
+      return;
+    }
+
+    // Scroll to section if already on the homepage
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <footer className="border-t border-[var(--color-border)]">
       <div className="container py-8">
@@ -64,33 +83,31 @@ export const Footer = () => {
             sphereal.ai
           </Link>
           <nav className="flex flex-col md:flex-row gap-8 md:gap-16 items-center">
-            {navItems.map((item) => (
+            {navItems.map(({ name, href }) => (
               <a
-                href={item.href}
-                key={item.href}
-                className="uppercase text-xs tracking-widest font-bold text-gray-400"
+                href={href}
+                key={href}
+                className="font-medium text-xs md:text-sm tracking-widest text-gray-400 hover:text-purple-500 uppercase inline-flex items-center transition-colors"
                 onClick={(e) => {
-                  e.preventDefault();
-                  const element = document.querySelector(item.href);
+                  handleNavClick(e, href)
+                  const element = document.querySelector(href);
                   if (element) {
-                    element.scrollIntoView({
-                      behavior: "smooth",
-                    });
+                    element.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
               >
-                {item.name}
+                {name}
               </a>
             ))}
             {isLoggedIn ? (
               <button
                 onClick={handleLogout}
-                className="uppercase text-xs tracking-widest font-bold text-gray-400"
+                className="uppercase text-xs md:text-sm tracking-widest font-medium text-gray-400 hover:text-purple-500 transition-colors"
               >
                 Logout
               </button>
             ) : (
-              <Link href={"/login"} className="uppercase text-xs tracking-widest font-bold text-gray-400">
+              <Link href={"/login"} className="uppercase text-xs tracking-widest font-bold text-gray-400 hover:text-purple-500 transition-colors">
                 Login
               </Link>
             )}
