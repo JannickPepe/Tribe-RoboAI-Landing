@@ -29,6 +29,10 @@ export const navItemsAuth = [
     href: "/auth/plans",
   },
   {
+    name: "Ai-Chat",
+    href: "/chat",
+  },
+  {
     name: "Profile",
     href: "/auth/profile",
   },

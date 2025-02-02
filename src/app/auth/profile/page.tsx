@@ -16,7 +16,7 @@ const ProfilePage = () => {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
   const [createdAt, setCreatedAt] = useState<string | null>(null);
-
+  const [chatEmail, setChatEmail] = useState<string | null>(null);
 
   useEffect(() => {
     // Retrieve the verified plan from localStorage
@@ -28,12 +28,15 @@ const ProfilePage = () => {
     const storedName = localStorage.getItem("name");
     const storedEmail = localStorage.getItem("email");
     const storedDate = localStorage.getItem("createdAt");
+    const storedChatEmail = localStorage.getItem("chatEmail");
 
     if (storedName) setUserName(storedName);
     if (storedEmail) setUserEmail(storedEmail);
     if (storedDate) {
       setCreatedAt(storedDate);
     }
+    if (storedChatEmail) setChatEmail(storedChatEmail);
+
   }, []);
 
   // Remove verified plan from localStorage
@@ -41,6 +44,11 @@ const ProfilePage = () => {
     setVerifiedPlan(null);
     localStorage.removeItem("verifiedPlan"); // Delete from storage
     localStorage.removeItem("isVerified"); // Reset verification state
+  };
+
+  const handleRemoveChatActivity = () => {
+    setChatEmail(null);
+    localStorage.removeItem("chatEmail");
   };
 
   return (
@@ -66,6 +74,32 @@ const ProfilePage = () => {
                   <p className="text-lg text-gray-400 mt-2">
                     <span className="text-xl font-semibold">Email:</span> {userEmail || "Not available"}
                   </p>
+
+                  {chatEmail ? (
+                    <div>
+                      <p className="text-lg text-green-400 mt-4">
+                        <span className="text-xl font-semibold">AI Chat Active:</span> with email {chatEmail}
+                      </p>
+                      <button
+                        onClick={handleRemoveChatActivity}
+                        className="mt-4 px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition"
+                      >
+                        Remove AI Chat Activity
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="mt-4">
+                      <p className="text-lg text-gray-400">
+                        No AI chat,{" "}
+                        <a
+                          href="/chat"
+                          className="text-blue-400 hover:underline"
+                        >
+                          start here
+                        </a>.
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Plan Info Box */}

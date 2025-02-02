@@ -2,8 +2,74 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import aiChatImg from "@/assets/images/ai-chat-robo.webp";
+
+interface ChatModalProps {
+    onClose: () => void;
+    messages: { text: string; sender: string; time: string }[];
+    handleSend: () => void;
+    input: string;
+    setInput: (input: string) => void;
+}
+
+const ChatModal = ({ onClose, messages, handleSend, input, setInput }: ChatModalProps) => {
+    return ReactDOM.createPortal(
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="bg-gray-900 rounded-2xl max-w-lg w-full p-6"
+            >
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-bold text-white">Chat with AI</h2>
+                    <button
+                        onClick={onClose}
+                        className="text-gray-300 hover:text-white transition text-sm"
+                    >
+                        Close
+                    </button>
+                </div>
+                <div className="flex flex-col space-y-4 h-[300px] overflow-y-auto">
+                    {messages.map((message: { text: string; sender: string; time: string }, index: number) => (
+                        <div
+                            key={index}
+                            className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+                        >
+                            <div
+                                className={`${
+                                    message.sender === "user" ? "bg-purple-700" : "bg-gray-700"
+                                } px-4 py-2 rounded-lg max-w-xs text-sm`}
+                            >
+                                {message.text}
+                                <div className="text-xs text-gray-300 mt-1">{message.time}</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <div className="mt-4 flex items-center gap-4">
+                    <input
+                        type="text"
+                        placeholder="Write a message"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        className="flex-1 px-4 py-2 text-black rounded-lg outline-none"
+                    />
+                    <button
+                        onClick={handleSend}
+                        className="bg-purple-700 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition"
+                    >
+                        Send
+                    </button>
+                </div>
+            </motion.div>
+        </div>,
+        document.body
+    );
+};
 
 const ChatPage = () => {
     const [messages, setMessages] = useState([
@@ -12,13 +78,42 @@ const ChatPage = () => {
         { text: "Hey, I wanted to know about your experience on the UI/UX part.", sender: "bot", time: "6:32 pm" },
         { text: "Yes, I have experience of 3+ years on UI/UX.", sender: "user", time: "6:33 pm" },
     ]);
-
     const [input, setInput] = useState("");
+    const [email, setEmail] = useState("");
+    const [chatEmail, setChatEmail] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        const savedEmail = localStorage.getItem("chatEmail");
+        if (savedEmail) {
+            setChatEmail(savedEmail);
+        }
+    }, []);
+
+    const handleJoinBeta = () => {
+        if (email.trim() === "") return;
+        localStorage.setItem("chatEmail", email);
+        setChatEmail(email);
+        setEmail("");
+    };
 
     const handleSend = () => {
         if (input.trim() === "") return;
-        setMessages([...messages, { text: input, sender: "user", time: "6:34 pm" }]);
+        setMessages([...messages, { text: input, sender: "user", time: new Date().toLocaleTimeString() }]);
         setInput("");
+    };
+
+    const handleStartChat = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleRemoveChatActivity = () => {
+        localStorage.removeItem("chatEmail");
+        setChatEmail(null);
     };
 
     return (
@@ -35,16 +130,38 @@ const ChatPage = () => {
                     These are just a few of the many attractions Paris has to offer. Let me know if you&apos;d like more information
                     or details on anything specific!
                 </p>
-                <div className="mt-6 lg:flex items-center gap-4 justify-center space-y-2 lg:space-y-0">
-                    <input
-                        type="email"
-                        placeholder="Email Address"
-                        className="px-4 py-2 text-black rounded-lg outline-none"
-                    />
-                    <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg transition">
-                        Join Beta
-                    </button>
-                </div>
+                {!chatEmail ? (
+                    <div className="mt-6 lg:flex items-center gap-4 justify-center space-y-2 lg:space-y-0">
+                        <input
+                            type="email"
+                            placeholder="Email Address"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="px-4 py-2 text-black rounded-lg outline-none"
+                        />
+                        <button
+                            onClick={handleJoinBeta}
+                            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg transition"
+                        >
+                            Join Beta
+                        </button>
+                    </div>
+                ) : (
+                    <div className="mt-6 flex flex-col items-center gap-4">
+                        <button
+                            onClick={handleStartChat}
+                            className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition"
+                        >
+                            Start Chat
+                        </button>
+                        <button
+                            onClick={handleRemoveChatActivity}
+                            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition"
+                        >
+                            Remove Chat Activity
+                        </button>
+                    </div>
+                )}
             </motion.div>
 
             {/* Main Grid Section */}
@@ -73,21 +190,6 @@ const ChatPage = () => {
                             </div>
                         ))}
                     </div>
-                    <div className="mt-6 flex items-center gap-4">
-                        <input
-                            type="text"
-                            placeholder="Write a message"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            className="flex-1 px-4 py-2 text-black rounded-lg outline-none"
-                        />
-                        <button
-                            onClick={handleSend}
-                            className="bg-purple-700 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition"
-                        >
-                            Send
-                        </button>
-                    </div>
                 </motion.div>
 
                 {/* Robot Image */}
@@ -105,6 +207,17 @@ const ChatPage = () => {
                     />
                 </motion.div>
             </div>
+
+            {/* Chat Modal */}
+            {isModalOpen && (
+                <ChatModal
+                    onClose={handleCloseModal}
+                    messages={messages}
+                    handleSend={handleSend}
+                    input={input}
+                    setInput={setInput}
+                />
+            )}
         </div>
     );
 };
