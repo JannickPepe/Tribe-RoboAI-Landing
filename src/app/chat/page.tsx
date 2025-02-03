@@ -4,7 +4,9 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
+import Link from "next/link";
 import aiChatImg from "@/assets/images/ai-chat-robo.webp";
+import { getRandomResponse } from "@/utils/chatResponses";
 
 interface ChatModalProps {
     onClose: () => void;
@@ -34,7 +36,7 @@ const ChatModal = ({ onClose, messages, handleSend, input, setInput }: ChatModal
                     </button>
                 </div>
                 <div className="flex flex-col space-y-4 h-[300px] overflow-y-auto">
-                    {messages.map((message: { text: string; sender: string; time: string }, index: number) => (
+                    {messages.map((message, index) => (
                         <div
                             key={index}
                             className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
@@ -72,12 +74,7 @@ const ChatModal = ({ onClose, messages, handleSend, input, setInput }: ChatModal
 };
 
 const ChatPage = () => {
-    const [messages, setMessages] = useState([
-        { text: "Hey Emon...", sender: "bot", time: "6:30 pm" },
-        { text: "Yeah, fine. What about you?", sender: "user", time: "6:30 pm" },
-        { text: "Hey, I wanted to know about your experience on the UI/UX part.", sender: "bot", time: "6:32 pm" },
-        { text: "Yes, I have experience of 3+ years on UI/UX.", sender: "user", time: "6:33 pm" },
-    ]);
+    const [messages, setMessages] = useState<{ text: string; sender: string; time: string }[]>([]);
     const [input, setInput] = useState("");
     const [email, setEmail] = useState("");
     const [chatEmail, setChatEmail] = useState<string | null>(null);
@@ -87,8 +84,18 @@ const ChatPage = () => {
         const savedEmail = localStorage.getItem("chatEmail");
         if (savedEmail) {
             setChatEmail(savedEmail);
+            const savedMessages = localStorage.getItem(`chatMessages_${savedEmail}`);
+            if (savedMessages) {
+                setMessages(JSON.parse(savedMessages));
+            }
         }
     }, []);
+
+    const saveMessagesToLocalStorage = (updatedMessages: { text: string; sender: string; time: string }[]) => {
+        if (chatEmail) {
+            localStorage.setItem(`chatMessages_${chatEmail}`, JSON.stringify(updatedMessages));
+        }
+    };
 
     const handleJoinBeta = () => {
         if (email.trim() === "") return;
@@ -99,8 +106,20 @@ const ChatPage = () => {
 
     const handleSend = () => {
         if (input.trim() === "") return;
-        setMessages([...messages, { text: input, sender: "user", time: new Date().toLocaleTimeString() }]);
+        const userMessage = { text: input, sender: "user", time: new Date().toLocaleTimeString() };
+        const updatedMessages = [...messages, userMessage];
+
+        setMessages(updatedMessages);
+        saveMessagesToLocalStorage(updatedMessages);
         setInput("");
+
+        // Simulate AI response after delay
+        setTimeout(() => {
+            const botMessage = { text: getRandomResponse(), sender: "bot", time: new Date().toLocaleTimeString() };
+            const newUpdatedMessages = [...updatedMessages, botMessage];
+            setMessages(newUpdatedMessages);
+            saveMessagesToLocalStorage(newUpdatedMessages);
+        }, 1000);
     };
 
     const handleStartChat = () => {
@@ -109,11 +128,6 @@ const ChatPage = () => {
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-    };
-
-    const handleRemoveChatActivity = () => {
-        localStorage.removeItem("chatEmail");
-        setChatEmail(null);
     };
 
     return (
@@ -154,12 +168,12 @@ const ChatPage = () => {
                         >
                             Start Chat
                         </button>
-                        <button
-                            onClick={handleRemoveChatActivity}
-                            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition"
+                        <Link
+                            href={'/auth/profile'}
+                            className="text-neutral-300 hover:text-neutral-400 transition"
                         >
                             Remove Chat Activity
-                        </button>
+                        </Link>
                     </div>
                 )}
             </motion.div>

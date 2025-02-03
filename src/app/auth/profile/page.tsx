@@ -17,38 +17,46 @@ const ProfilePage = () => {
   const [userName, setUserName] = useState<string | null>(null);
   const [createdAt, setCreatedAt] = useState<string | null>(null);
   const [chatEmail, setChatEmail] = useState<string | null>(null);
+  const [messageCount, setMessageCount] = useState<number>(0);
 
   useEffect(() => {
-    // Retrieve the verified plan from localStorage
+    // Retrieve user information from localStorage
     const storedPlan = localStorage.getItem("verifiedPlan");
-    if (storedPlan) {
-      setVerifiedPlan(JSON.parse(storedPlan));
-    }
-    // Retrieve user email and account creation date
     const storedName = localStorage.getItem("name");
     const storedEmail = localStorage.getItem("email");
     const storedDate = localStorage.getItem("createdAt");
     const storedChatEmail = localStorage.getItem("chatEmail");
 
+    if (storedPlan) setVerifiedPlan(JSON.parse(storedPlan));
     if (storedName) setUserName(storedName);
     if (storedEmail) setUserEmail(storedEmail);
-    if (storedDate) {
-      setCreatedAt(storedDate);
-    }
+    if (storedDate) setCreatedAt(storedDate);
     if (storedChatEmail) setChatEmail(storedChatEmail);
 
+    // Retrieve message count for the chat email
+    if (storedChatEmail) {
+      const savedMessages = localStorage.getItem(`chatMessages_${storedChatEmail}`);
+      if (savedMessages) {
+        const parsedMessages = JSON.parse(savedMessages);
+        const userMessages = parsedMessages.filter((msg: { sender: string }) => msg.sender === "user");
+        setMessageCount(userMessages.length);
+      }
+    }
   }, []);
 
-  // Remove verified plan from localStorage
   const handleRemoveVerifiedPlan = () => {
     setVerifiedPlan(null);
-    localStorage.removeItem("verifiedPlan"); // Delete from storage
-    localStorage.removeItem("isVerified"); // Reset verification state
+    localStorage.removeItem("verifiedPlan");
+    localStorage.removeItem("isVerified");
   };
 
   const handleRemoveChatActivity = () => {
-    setChatEmail(null);
-    localStorage.removeItem("chatEmail");
+    if (chatEmail) {
+      localStorage.removeItem(`chatMessages_${chatEmail}`);
+      localStorage.removeItem("chatEmail");
+      setChatEmail(null);
+      setMessageCount(0);
+    }
   };
 
   return (
@@ -79,6 +87,9 @@ const ProfilePage = () => {
                     <div>
                       <p className="text-lg text-green-400 mt-4">
                         <span className="text-xl font-semibold">AI Chat Active:</span> with email {chatEmail}
+                      </p>
+                      <p className="text-lg text-gray-400 mt-2">
+                        <span className="text-xl font-semibold">Messages Sent:</span> {messageCount}
                       </p>
                       <button
                         onClick={handleRemoveChatActivity}

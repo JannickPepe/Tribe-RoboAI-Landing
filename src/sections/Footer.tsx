@@ -100,12 +100,17 @@ export const Footer = () => {
               </a>
             ))}
             {isLoggedIn ? (
-              <button
-                onClick={handleLogout}
-                className="uppercase text-xs md:text-sm tracking-widest font-medium text-gray-400 hover:text-purple-500 transition-colors"
-              >
-                Logout
-              </button>
+              <>
+                <Link href={'/chat'} className="uppercase text-xs md:text-sm tracking-widest font-medium text-gray-400 hover:text-purple-500 transition-colors">
+                  AI Chat
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="uppercase text-xs md:text-sm tracking-widest font-medium text-gray-400 hover:text-purple-500 transition-colors"
+                >
+                  Logout
+                </button>
+              </>
             ) : (
               <Link href={"/login"} className="uppercase text-xs tracking-widest font-bold text-gray-400 hover:text-purple-500 transition-colors">
                 Login
