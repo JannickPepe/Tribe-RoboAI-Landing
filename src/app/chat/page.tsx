@@ -93,8 +93,8 @@ const ChatPage = () => {
             setChatEmail(savedEmail);
             const savedMessages = localStorage.getItem(`chatMessages_${savedEmail}`);
             if (savedMessages) {
-                setMessages(JSON.parse(savedMessages));
-            }
+                return setMessages(JSON.parse(savedMessages));
+            } return  setMessages(initialMessages);
         }
     }, []);
 
@@ -111,14 +111,17 @@ const ChatPage = () => {
         setChatEmail(email);
         setEmail("");
     
-        // ✅ Immediately load messages after setting email
+        // Immediately load messages or set initial messages
         const savedMessages = localStorage.getItem(`chatMessages_${email}`);
         if (savedMessages) {
-            setMessages(JSON.parse(savedMessages));
+            setMessages(JSON.parse(savedMessages)); // Load existing messages
         } else {
-            setMessages([]); // If no messages, start with an empty array
+            // Set initial messages and save them to local storage
+            setMessages(initialMessages);
+            localStorage.setItem(`chatMessages_${email}`, JSON.stringify(initialMessages));
         }
     };
+    
 
     const handleSend = () => {
         if (input.trim() === "") return;

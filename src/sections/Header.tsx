@@ -150,12 +150,9 @@ export const Header = () => {
            {/* User Dropdown for Logged-In Users */}
             {isLoggedIn ? (
               <div className="relative hidden lg:block">
-                <button
-                  className="px-4 py-2 text-white bg-gray-800 rounded-lg"
-                  onClick={() => setIsDropdownOpen((prev) => !prev)}
-                >
+                <Button onClick={() => setIsDropdownOpen((prev) => !prev)}>
                   User
-                </button>
+                </Button>
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg">
                     {navItemsAuth.map(({ name, href }) => (
@@ -256,13 +253,36 @@ export const Header = () => {
                   {name}
                 </a>
               ))}
-              {loginItems.map(({ buttonVariant, name, href }) => (
-                <a href={href} key={name} className="w-full max-w-xs">
-                  <Button block variant={buttonVariant}>
-                    {name}
+
+              {/* Conditional rendering based on login state */}
+              {isLoggedIn ? (
+                <>
+                  {/* Authenticated Navigation Items */}
+                  {navItemsAuth.map(({ name, href }) => (
+                    <Link href={href} key={name} className="text-gray-400 uppercase tracking-widest font-bold text-xs h-10">
+                      {name}
+                    </Link>
+                  ))}
+                  {/* Logout and Delete User Buttons */}
+                  <Button block onClick={handleLogout} className="w-1/2">
+                    Logout
                   </Button>
-                </a>
-              ))}
+                  <Button block variant="tertiary" onClick={handleDeleteUser} className="w-1/2">
+                    Delete User
+                  </Button>
+                </>
+              ) : (
+                <>
+                  {/* Login/Signup Buttons for Guests */}
+                  {loginItems.map(({ buttonVariant, name, href }) => (
+                    <Link href={href} key={name} className="w-1/2">
+                      <Button block variant={buttonVariant}>
+                        {name}
+                      </Button>
+                    </Link>
+                  ))}
+                </>
+              )}
             </nav>
           </div>
         </div>
