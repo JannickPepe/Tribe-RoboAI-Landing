@@ -82,7 +82,7 @@ export const Footer = () => {
           <Link href={"/"} className="font-extrabold text-2xl">
             sphereal.ai
           </Link>
-          <nav className="flex flex-col md:flex-row gap-8 md:gap-16 items-center">
+          <nav className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
             {navItems.map(({ name, href }) => (
               <a
                 href={href}
@@ -112,9 +112,15 @@ export const Footer = () => {
                 </button>
               </>
             ) : (
-              <Link href={"/login"} className="uppercase text-xs tracking-widest font-bold text-gray-400 hover:text-purple-500 transition-colors">
-                Login
-              </Link>
+              <div className="flex items-center gap-4">
+                <Link href={'/chat'} className="uppercase text-xs md:text-sm tracking-widest font-medium text-gray-400 hover:text-purple-500 transition-colors">
+                  AI Chat
+                </Link>
+                <Link href={"/login"} className="uppercase text-xs md:text-sm tracking-widest font-medium text-gray-400 hover:text-purple-500 transition-colors">
+                  Login
+                </Link>
+              </div>
+            
             )}
           </nav>
         </div>

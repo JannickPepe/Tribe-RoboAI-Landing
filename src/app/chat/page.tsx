@@ -7,6 +7,7 @@ import ReactDOM from "react-dom";
 import Link from "next/link";
 import aiChatImg from "@/assets/images/ai-chat-robo.webp";
 import { getRandomResponse } from "@/utils/chatResponses";
+import { Button } from "@/components/Button";
 
 interface ChatModalProps {
     onClose: () => void;
@@ -15,6 +16,12 @@ interface ChatModalProps {
     input: string;
     setInput: (input: string) => void;
 }
+
+const initialMessages = [
+    { text: "Hi! How can I assist you today?", sender: "bot", time: "10:00 AM" },
+    { text: "What are your key features?", sender: "user", time: "10:01 AM" },
+    { text: "I can help you find attractions, answer questions, and provide guidance!", sender: "bot", time: "10:02 AM" },
+];
 
 const ChatModal = ({ onClose, messages, handleSend, input, setInput }: ChatModalProps) => {
     return ReactDOM.createPortal(
@@ -74,7 +81,7 @@ const ChatModal = ({ onClose, messages, handleSend, input, setInput }: ChatModal
 };
 
 const ChatPage = () => {
-    const [messages, setMessages] = useState<{ text: string; sender: string; time: string }[]>([]);
+    const [messages, setMessages] = useState<{ text: string; sender: string; time: string }[]>(initialMessages);
     const [input, setInput] = useState("");
     const [email, setEmail] = useState("");
     const [chatEmail, setChatEmail] = useState<string | null>(null);
@@ -99,9 +106,18 @@ const ChatPage = () => {
 
     const handleJoinBeta = () => {
         if (email.trim() === "") return;
+    
         localStorage.setItem("chatEmail", email);
         setChatEmail(email);
         setEmail("");
+    
+        // ✅ Immediately load messages after setting email
+        const savedMessages = localStorage.getItem(`chatMessages_${email}`);
+        if (savedMessages) {
+            setMessages(JSON.parse(savedMessages));
+        } else {
+            setMessages([]); // If no messages, start with an empty array
+        }
     };
 
     const handleSend = () => {
@@ -130,6 +146,12 @@ const ChatPage = () => {
         setIsModalOpen(false);
     };
 
+    const handleEndChatSession = () => {
+        localStorage.removeItem("chatEmail"); // ✅ Remove only the session
+        setChatEmail(null); // Reset chat state
+        setMessages(initialMessages);
+    };
+
     return (
         <div className="py-10 bg-black text-white flex flex-col items-center">
             {/* Header */}
@@ -153,26 +175,33 @@ const ChatPage = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             className="px-4 py-2 text-black rounded-lg outline-none"
                         />
-                        <button
+                        <Button
                             onClick={handleJoinBeta}
-                            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg transition"
                         >
                             Join Beta
-                        </button>
+                        </Button>
                     </div>
                 ) : (
                     <div className="mt-6 flex flex-col items-center gap-4">
-                        <button
-                            onClick={handleStartChat}
-                            className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition"
-                        >
-                            Start Chat
-                        </button>
+                        <div className="flex justify-center items-center gap-4">
+                            <Button
+                                onClick={handleStartChat}
+                                className=""
+                            >
+                                Start Chat
+                            </Button>
+                            <button
+                                onClick={handleEndChatSession}
+                                className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition"
+                            >
+                                End Chat Session
+                            </button>
+                        </div>
                         <Link
                             href={'/auth/profile'}
                             className="text-neutral-300 hover:text-neutral-400 transition"
                         >
-                            Remove Chat Activity
+                            Delete AI Chat
                         </Link>
                     </div>
                 )}

@@ -1,14 +1,14 @@
 "use client";
 
-import { HTMLAttributes, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { cva } from "class-variance-authority";
-import { animate, motion, useMotionTemplate, useMotionValue, } from "framer-motion";
+import { animate, motion, useMotionTemplate, useMotionValue, HTMLMotionProps } from "framer-motion";
 
 export type ButtonProps = {
   variant?: "primary" | "secondary" | "tertiary" | "disabled";
   block?: boolean;
   disabled?: boolean;
-} & HTMLAttributes<HTMLButtonElement>;
+} & Omit<HTMLMotionProps<"button">, "ref">;
 
 const classes = cva(
   "text-xs tracking-widest uppercase font-bold h-10 px-6 rounded-lg",
@@ -31,13 +31,14 @@ const classes = cva(
   }
 );
 
-export const Button = (props: ButtonProps) => {
-  const {
-    className = "",
-    children,
-    variant = "primary",
-    ...otherProps
-  } = props;
+export const Button = ({ 
+  className = "", 
+  children, 
+  variant = "primary", 
+  block = false,
+  onClick, // ✅ Explicitly extracting `onClick`
+  ...otherProps 
+}: ButtonProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const angle = useMotionValue(45);
   const background = useMotionTemplate`linear-gradient(var(--color-gray-950),var(--color-gray-950)) padding-box, conic-gradient(from ${angle}deg,var(--color-violet-400),var(--color-fuchsia-400),var(--color-amber-300),var(--color-teal-300),var(--color-violet-400)) border-box`;
@@ -58,15 +59,11 @@ export const Button = (props: ButtonProps) => {
     <motion.button
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={classes({ ...otherProps, variant, className })}
-      style={
-        variant === "primary"
-          ? {
-              background: background,
-            }
-          : undefined
-      }
-      disabled={props.disabled}
+      onClick={onClick}
+      className={classes({ block, variant, className })}
+      style={variant === "primary" ? { background: background } : undefined}
+      disabled={otherProps.disabled}
+      {...otherProps}
     >
       {children}
     </motion.button>
