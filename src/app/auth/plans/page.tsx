@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ProtectedRoute from "../ProtectedRoute";
 import Link from "next/link";
 import Loader from "@/assets/images/loader-animated.svg";
@@ -8,17 +8,32 @@ import Image from "next/image";
 import robotImg from "@/assets/images/robot.jpg";
 import { SectionBorder } from "@/components/SectionBorder";
 import { SectionContent } from "@/components/SectionContent";
+import { Button } from "@/components/Button";
+import underlineImage from "@/assets/images/underline.svg?url";
+import { usePathname, useRouter } from "next/navigation";
+import { FiZap } from "react-icons/fi";
+
+import { motion, useScroll, useTransform } from "framer-motion"
+
+export const navItems = [
+  {
+    name: "Pricing",
+    href: "#pricing",
+  },
+];
+
+interface Plan {
+  title: string;
+  description: string;
+  features: string[];
+  price: string | number | null;
+}
 
 const PlansPage = () => {
-  interface Plan {
-    title: string;
-    description: string;
-    features: string[];
-    price: string | number | null;
-  }
-
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [isVerified, setIsVerified] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     // Retrieve the selected plan and verification status from localStorage
@@ -52,6 +67,29 @@ const PlansPage = () => {
       setIsVerified(true); // Show verification message
     }
   };
+
+  const handleNavClick = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+
+    if (pathname !== "/") {
+      // If user is not on home page, go to home first
+      router.push(`/${href}`);
+      return;
+    }
+
+    // Scroll to section if already on the homepage
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+   const sectionRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["end start", "start end"],
+  });
+  const transformedY = useTransform(scrollYProgress, [0, 1], [200, -200]);
 
   return (
     <ProtectedRoute>
@@ -116,23 +154,89 @@ const PlansPage = () => {
 
             {/* Buttons */}
             <div className="mt-6 flex gap-4">
-              <button
-                onClick={handleVerifyPlan}
-                className="px-6 py-3 bg-indigo-600 text-white text-lg rounded-lg hover:bg-purple-700 transition"
-              >
-                Verify the Plan
-              </button>
+              <Button onClick={handleVerifyPlan} className="h-12">
+                <p className="text-xs md:text-sm">Verify the Plan</p>
+              </Button>
 
               <button
                 onClick={handleRemovePlan}
-                className="px-6 py-3 bg-red-600 text-white text-lg rounded-lg hover:bg-red-700 transition"
+                className="px-6 py-2 bg-red-600 text-white text-lg rounded-lg hover:bg-red-700 transition"
               >
                 Remove Plan
               </button>
             </div>
           </div>
         ) : (
-          <h1 className="text-3xl text-gray-200">No plan selected.</h1>
+          <section className="container text-center py-16">
+            <h1 className="text-5xl text-gray-200">No plan selected.</h1>
+            <div className="text-xl mt-2 max-w-lg mx-auto">
+              You can go to the{" "} 
+              <span className="relative isolate">
+                {navItems.map(({ name, href }) => (
+                  <a  
+                    href={href}
+                    key={href}  
+                    onClick={(e) => {
+                      handleNavClick(e, href)
+                      const element = document.querySelector(href);
+                      if (element) {
+                        element.scrollIntoView({ behavior: "smooth" });
+                      }
+                    }}
+                  >
+                    {name},{" "}
+                  </a>
+                ))}
+                <span
+                  className="absolute top-8 left-0 w-full -translate-y-1/2 h-4 bg-[linear-gradient(to_right,var(--color-amber-300),var(--color-teal-300),var(--color-violet-400),var(--color-fuchsia-400))]"
+                  style={{
+                    maskImage: `url(${underlineImage.src})`,
+                    maskSize: "contain",
+                    maskPosition: "top",
+                    maskRepeat: "no-repeat",
+                  }}
+                ></span>
+              </span>
+              where you will be able to chose 1 out of 3 different plans.
+            </div>
+
+            <div className="relative isolate max-w-3xl mx-auto">
+              <div className="absolute left-0 z-10 top-[30%] -translate-x-10 hidden lg:block">
+                <motion.div
+                  className="bg-gray-800/70 backdrop-blur-md border border-gray-700 rounded-xl p-4 w-72"
+                  style={{
+                    y: transformedY,
+                  }}
+                >
+                  <div>
+                    Can you generate an incredible frontend dev video tutorial?
+                  </div>
+                  <div className="text-right text-gray-400 text-sm font-semibold flex items-center justify-between">
+                    <FiZap className="size-4 text-purple-600" /> <span>1m ago</span>
+                  </div>
+                </motion.div>
+              </div>
+              <div className="absolute right-0 z-10 top-[50%] translate-x-10 hidden lg:block">
+                <motion.div
+                  className="bg-gray-800/70 backdrop-blur-md border border-gray-700 rounded-xl p-4 w-72"
+                  style={{
+                    y: transformedY,
+                  }}
+                >
+                  <div>
+                    <strong>Brainwave:</strong> I created one based on videos
+                    from NighteCoding!
+                  </div>
+                  <div className="text-right text-gray-400 text-sm font-semibold flex items-center justify-between">
+                    <FiZap className="size-4 text-purple-600" /> <span>Just now</span>
+                  </div>
+                </motion.div>
+              </div>
+              <div className="mt-10 rounded-2xl border-2 overflow-hidden border-gradient relative flex">
+                <Image src={robotImg} alt="Robot image" />
+              </div>
+              </div>
+          </section>
         )}
       </div>
     </ProtectedRoute>
