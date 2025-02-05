@@ -122,7 +122,7 @@ export const Header = () => {
           <div className="h-18 lg:h-20 flex justify-between items-center">
             <Link href={'/'} className="flex gap-4 items-center">
               <Logo />
-              <div className="font-extrabold text-2xl">sphereal.ai</div>
+              <div className="font-extrabold text-2xl">AI-Landing</div>
             </Link>
 
             {/* Desktop Navigation */}

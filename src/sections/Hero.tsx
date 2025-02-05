@@ -93,7 +93,7 @@ export const Hero = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-100 text-center leading-tight">
               Unlock the Future of AI Conversations with{" "}
               <span className="relative">
-                <span>Sphereal</span>
+                <span>AI-Landing</span>
                 <span
                   className="absolute w-full left-0 top-full -translate-y-1/2 h-4 bg-[linear-gradient(to_right,var(--color-amber-300),var(--color-teal-300),var(--color-violet-400),var(--color-fuchsia-400))]"
                   style={{
@@ -106,7 +106,7 @@ export const Hero = () => {
               </span>
             </h1>
             <p className="text-center text-lg md:text-xl mt-8 max-w-3xl mx-auto">
-              Harness the power of AI with Sphereal. Elevate your productivity
+              Harness the power of AI with AI-Landing. Elevate your productivity
               and streamline your workflow with our cutting-edge AI chat
               platform.
             </p>

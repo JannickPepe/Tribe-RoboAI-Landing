@@ -80,7 +80,7 @@ export const Footer = () => {
       <div className="container py-8">
         <div className="flex flex-col lg:flex-row lg:justify-between items-center gap-8">
           <Link href={"/"} className="font-extrabold text-2xl">
-            sphereal.ai
+            AI-Landing
           </Link>
           <nav className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
             {navItems.map(({ name, href }) => (
