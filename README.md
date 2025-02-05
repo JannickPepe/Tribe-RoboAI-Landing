@@ -1,6 +1,6 @@
 # JP-Tribe-AI-Landing
 
-A modern AI landing page designed and developed by **NighteCoding**. This project provides a visually appealing and responsive design using cutting-edge technologies to showcase AI tools and features.
+A modern AI landing page developed by **NighteCoding**. This project provides a visually appealing and responsive design using cutting-edge technologies to showcase AI UI and features.
 
 ![Project Preview](./public/assets/images/NighteCoding-AiLanding.png)
 

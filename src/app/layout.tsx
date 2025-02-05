@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from "next";
 import { Sora, Space_Grotesk } from "next/font/google";
 import "./globals.css";
@@ -42,6 +43,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
       >
         <Header />
         {children}
+        <Analytics />
         <Footer />
       </body>
     </html>
