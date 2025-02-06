@@ -101,18 +101,24 @@ export const Header = () => {
 
   const handleNavClick = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
-
-    if (pathname !== "/") {
-      // If user is not on home page, go to home first
-      router.push(`/${href}`);
-      return;
+  
+    if (href.startsWith("#")) {
+      if (pathname !== "/") {
+        // Redirect to the homepage and include the hash in the URL
+        router.push(`/${href}`);
+      } else {
+        // Scroll to the section if already on the homepage
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    } else {
+      // Navigate to other pages
+      router.push(href);
     }
-
-    // Scroll to section if already on the homepage
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+  
+    setIsMobileNavOpen(false); // Close the mobile menu
   };
 
   return (
@@ -243,15 +249,29 @@ export const Header = () => {
                   className="text-gray-400 uppercase tracking-widest font-bold text-xs h-10"
                   onClick={(e) => {
                     e.preventDefault();
-                    const targetId = href.startsWith("#") ? href : `#${href.replace("/", "")}`;
-                    const element = document.querySelector(targetId);
-                    if (element) {
-                      element.scrollIntoView({ behavior: "smooth" });
+              
+                    if (href.startsWith("#")) {
+                      if (pathname !== "/") {
+                        // Redirect to homepage with hash if not already on the homepage
+                        router.push(`/${href}`);
+                      } else {
+                        // Smooth scroll if already on the homepage
+                        const element = document.querySelector(href);
+                        if (element) {
+                          element.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }
+                    } else {
+                      // Navigate to non-hash links (e.g., /auth/profile)
+                      router.push(href);
                     }
+              
+                    // Close the mobile menu
+                    setIsMobileNavOpen(false);
                   }}
                 >
-                  {name}
-                </a>
+                {name}
+              </a>
               ))}
 
               {/* Conditional rendering based on login state */}
@@ -259,7 +279,12 @@ export const Header = () => {
                 <>
                   {/* Authenticated Navigation Items */}
                   {navItemsAuth.map(({ name, href }) => (
-                    <Link href={href} key={name} className="text-gray-400 uppercase tracking-widest font-bold text-xs h-10">
+                    <Link 
+                      href={href} 
+                      key={name} 
+                      onClick={() => setIsMobileNavOpen(false)} 
+                      className="text-gray-400 uppercase tracking-widest font-bold text-xs h-10"
+                    >
                       {name}
                     </Link>
                   ))}
